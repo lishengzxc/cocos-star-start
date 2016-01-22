@@ -325,7 +325,7 @@
     },
     "_enabled": true,
     "jumpHeight": 200,
-    "jumpDuration": 0.1,
+    "jumpDuration": 0.3,
     "maxMoveSpeed": 400,
     "accel": 350,
     "jumpAudio": {
@@ -442,6 +442,9 @@
     },
     "scoreDisplay": {
       "__id__": 11
+    },
+    "scoreAudio": {
+      "__uuid__": "fa914049-bdb2-4025-9df1-a7cc78e824a4"
     }
   }
 ]

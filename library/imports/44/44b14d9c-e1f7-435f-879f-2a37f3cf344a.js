@@ -25,6 +25,10 @@ cc.Class({
         scoreDisplay: {
             'default': null,
             type: cc.Label
+        },
+        scoreAudio: {
+            'default': null,
+            url: cc.AudioClip
         }
     },
 
@@ -32,7 +36,12 @@ cc.Class({
         // 获取地平面的 y 轴坐标
         this.groundY = this.ground.y + this.ground.height / 2;
         // 生成一个新的星星
+
+        this.timer = 0;
+        this.starDuration = 0;
+        // 生成一个新的星星
         this.spawnNewStar();
+        // 初始化计分
         this.score = 0;
     },
 
@@ -45,6 +54,9 @@ cc.Class({
         newStar.setPosition(this.getNewStarPosition());
 
         newStar.getComponent('Star').game = this;
+
+        this.starDuration = this.minStarDuration + cc.random0To1() * (this.maxStarDuration - this.minStarDuration);
+        this.timer = 0;
     },
 
     getNewStarPosition: function getNewStarPosition() {
@@ -62,5 +74,21 @@ cc.Class({
         this.score += 1;
         // 更新 scoreDisplay Label 的文字
         this.scoreDisplay.string = 'Score: ' + this.score.toString();
+        cc.audioEngine.playEffect(this.scoreAudio, false);
+    },
+
+    update: function update(dt) {
+        // 每帧更新计时器，超过限度还没有生成新的星星
+        // 就会调用游戏失败逻辑
+        if (this.timer > this.starDuration) {
+            this.gameOver();
+            return;
+        }
+        this.timer += dt;
+    },
+
+    gameOver: function gameOver() {
+        this.player.stopAllActions(); //停止 player 节点的跳跃动作
+        cc.director.loadScene('game');
     }
 });
